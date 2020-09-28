@@ -15,8 +15,9 @@ export async function getAddressFromCoords(coords) {
     throw new Error(data.error_message)
   }
 
-  const address = data.results[0].formatted_address;
-  return address
+  let address;
+  address = data.results[0].formatted_address;
+  return address;
 }
 
 
@@ -35,8 +36,7 @@ export async function getCoordsFormAddress(address) {
 
     throw new Error(data.error_message)
   }
-  
-  const coordinates = data.results[0].geometry.location;
+  const {location: coordinates} = data.results[0].geometry;
   return coordinates;
 
 }
