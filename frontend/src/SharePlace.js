@@ -3,14 +3,14 @@ import { Map } from "./UI/Map";
 import { getCoordsFormAddress, getAddressFromCoords } from "./Utility/Location";
 
 
-class PlaceFider {
+class PlaceFinder {
   constructor() {
-    const addressForm = document.querySelector("form");
-    const locateUserBtn = document.getElementById("locate-btn");
+    const addressForm = document.querySelector('form');
+    const locateUserBtn = document.getElementById('locate-btn');
     this.shareBtn = document.getElementById('share-btn')
 
     locateUserBtn.addEventListener("click", this.locateUserHandler.bind(this));
-    this.shareBtn.addEventListener('click', this.sharePlaceHandler.bind(this))
+    this.shareBtn.addEventListener('click', this.sharePlaceHandler);
     addressForm.addEventListener("submit", this.findAddressHandler.bind(this));
 
   }
@@ -25,7 +25,7 @@ class PlaceFider {
     }
 
     navigator.clipboard.writeText(sharedLinkInput.value)
-    .then( ()=> {
+    .then(()=> {
       console.dir('Copy in buffer')
 
     })
@@ -42,6 +42,24 @@ class PlaceFider {
     } else {
       this.map = new Map(coordinates);
     }
+    fetch( 'http://localhost:3000/add-location-point', {
+      method: 'POST',
+
+      body: JSON.stringify( {
+        address: address,
+        lat: coordinates.lat,
+        lng: coordinates.lng
+
+      } ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+        .then( response => {
+        return response.json();
+      } ).then( data => {
+        console.log( data );
+      });
 
     this.shareBtn.disabled = false;
     const sharedLinkInput = document.getElementById('share-link')
@@ -62,7 +80,7 @@ class PlaceFider {
 
     navigator.geolocation.getCurrentPosition(
       async (successResult) => {
-      
+
         const coordinates = {
           lat: successResult.coords.latitude + Math.random() / 50,
           lng: successResult.coords.longitude + Math.random() / 50,
@@ -70,9 +88,9 @@ class PlaceFider {
         const address = await getAddressFromCoords(coordinates)
 
         modal.hide();
-           
+
         this.selectPlace(coordinates, address);
-        
+
       },
       (error) => {
         modal.hide();
@@ -102,4 +120,4 @@ class PlaceFider {
   }
 }
 
-const placeFinder = new PlaceFider();
+const placeFinder = new PlaceFinder();
