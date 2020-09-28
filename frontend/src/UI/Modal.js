@@ -12,10 +12,10 @@ export class Modal {
        this.modalElement = modalElements.querySelector('.modal')
        this.backdropElement = modalElements.querySelector('.backdrop')
        const contentElement = document.importNode(this.contentTemplateElement.content, true)
-      
+
        this.modalElement.appendChild(contentElement)
-       document.body.insertAdjacentElement('afterBegin', this.modalElement)
-       document.body.insertAdjacentElement('afterBegin', this.backdropElement)
+       document.body.insertAdjacentElement('afterbegin', this.modalElement)
+       document.body.insertAdjacentElement('afterbegin', this.backdropElement)
 
     } else {
       //fallback
