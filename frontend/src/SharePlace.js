@@ -57,14 +57,12 @@ class PlaceFinder {
     })
         .then( response => {
         return response.json();
-      } ).then( data => {
-        console.log( data );
+      }).then( data => {
+        const locationId = data.locId;
+        this.shareBtn.disabled = false;
+        const sharedLinkInput = document.getElementById('share-link')
+        sharedLinkInput.value = `${location.origin}/my-place?location=${locationId}`
       });
-
-    this.shareBtn.disabled = false;
-    const sharedLinkInput = document.getElementById('share-link')
-    sharedLinkInput.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${coordinates.lng}`
-
   }
 
   locateUserHandler() {
